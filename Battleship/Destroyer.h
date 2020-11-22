@@ -1,5 +1,7 @@
 #pragma once
-class Destroyer
+#include <iostream>
+#include "Ship.h"
+class Destroyer : public Ship
 {
 };
 

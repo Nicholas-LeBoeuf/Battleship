@@ -4,7 +4,7 @@
 
 void Board::displayBoard()
 {
-	spot[54] = 'X';
+	spot[56] = (char)254;
 	std::cout << "\t\t1 2 3 4 5 6 7 8 9 10" << std::endl;
 	std::cout << "\t      A|" << spot[0] << "|" << spot[1] << "|" << spot[2] << "|" << spot[3] << "|" << spot[4] << "|" << spot[5] << "|" << spot[6] << "|" << spot[7] << "|" << spot[8] << "|" << spot[9] << "|" << std::endl;
 	std::cout << "\t      B|" << spot[10] << "|" << spot[11] << "|" << spot[12] << "|" << spot[13] << "|" << spot[14] << "|" << spot[15] << "|" << spot[16] << "|" << spot[17] << "|" << spot[18] << "|" << spot[19] << "|" << std::endl;
@@ -16,6 +16,11 @@ void Board::displayBoard()
 	std::cout << "\t      H|" << spot[70] << "|" << spot[71] << "|" << spot[72] << "|" << spot[73] << "|" << spot[74] << "|" << spot[75] << "|" << spot[76] << "|" << spot[77] << "|" << spot[78] << "|" << spot[79] << "|" << std::endl;
 	std::cout << "\t      I|" << spot[80] << "|" << spot[81] << "|" << spot[82] << "|" << spot[83] << "|" << spot[84] << "|" << spot[85] << "|" << spot[86] << "|" << spot[87] << "|" << spot[88] << "|" << spot[89] << "|" << std::endl;
 	std::cout << "\t      J|" << spot[90] << "|" << spot[91] << "|" << spot[92] << "|" << spot[93] << "|" << spot[94] << "|" << spot[95] << "|" << spot[96] << "|" << spot[97] << "|" << spot[98] << "|" << spot[99] << "|" << std::endl;
+}
+
+void Board::updateBoard(int userSpot)
+{
+	spot[userSpot] = (char)254;
 }
 
 void Board::setChar()
@@ -38,7 +43,7 @@ bool Board::checkInput(std::string userInput)
 	}
 }
 
-void Board::checkForNull(std::string userInput)
+int Board::findArrayIndex(std::string userInput)
 {
 	int n = sizeof(validInputs);
 	int i = 0;
@@ -50,5 +55,13 @@ void Board::checkForNull(std::string userInput)
 		i++;
 	}
 
-	std::cout << "Input " << userInput << " is present at index " << i << std::endl;
+	return i;
+}
+
+bool Board::checkForEmptySpot(int index)
+{
+	if (spot[index] == NULL)
+		return true;
+	else
+		return false;
 }
