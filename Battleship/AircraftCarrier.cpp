@@ -18,6 +18,6 @@ int AircraftCarrier::nextSpot(int index, char orientation)
 	else 
 	{
 		counter = 1;
-		return 101;
+		return NULL;
 	}
 }

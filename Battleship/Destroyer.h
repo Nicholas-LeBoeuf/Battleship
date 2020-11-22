@@ -3,5 +3,10 @@
 #include "Ship.h"
 class Destroyer : public Ship
 {
+public:
+	int nextSpot(int index, char orientation);
+
+private:
+	int counter = 1;
 };
 

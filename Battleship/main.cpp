@@ -26,7 +26,7 @@ int main()
 	Submarine submarine;
 
 	std::string userInput;
-	int userSpot, userSpotTemp;
+	int userSpot, userSpotTemp, counter;
 	char orientation;
 	bool validPlacement = true;
 
@@ -38,7 +38,8 @@ int main()
 	board.setChar();
 	board.displayBoard();
 
-	std::cout << "Specify where you want to place the edge of your ship. (Example 'A1')" << std::endl;
+	//Place aircraft carrier start
+	std::cout << "Specify where you want to place the edge of your Aircraft Carrier (5 spaces). (Example 'A1')" << std::endl;
 	std::cin >> userInput;
 	while (!board.checkInput(userInput))
 	{
@@ -63,16 +64,19 @@ int main()
 	orientation = aircraftCarrier.orientation();
 
 	userSpotTemp = userSpot;
-	
-	while (userSpotTemp != 101)
+	counter = 1;
+	while (counter != 6)
 	{
-		userSpotTemp = aircraftCarrier.nextSpot(userSpot, orientation);
+		userSpotTemp = aircraftCarrier.nextSpot(userSpotTemp, orientation);
+		if (userSpotTemp == NULL)
+			break;
 		if (board.checkForEmptySpot(userSpotTemp) == false)
 		{
 			std::cout << "Cannot place ship here because it will overlap another ship." << std::endl;
 			validPlacement = false;
 			break;
 		}
+		counter++;
 	}
 
 	if (validPlacement == true)
@@ -86,6 +90,287 @@ int main()
 
 		board.displayBoard();
 	}
+	//End of placing aircraft carrier
+
+
+	//Place battleship start
+	std::cout << "Specify where you want to place the edge of your Battleship (4 spaces). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	orientation = battleship.orientation();
+
+	userSpotTemp = userSpot;
+	counter = 1;
+	while (counter != 5)
+	{
+		userSpotTemp = battleship.nextSpot(userSpotTemp, orientation);
+		if (userSpotTemp == NULL)
+			break;
+		if (board.checkForEmptySpot(userSpotTemp) == false)
+		{
+			std::cout << "Cannot place ship here because it will overlap another ship." << std::endl;
+			validPlacement = false;
+			break;
+		}
+		counter++;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		for (int i = 1; i < 4; i++)
+		{
+			userSpot = battleship.nextSpot(userSpot, orientation);
+			board.updateBoard(userSpot);
+		}
+
+		board.displayBoard();
+	}
+	//End of placing battleship
+
+	//Place cruiser start
+	std::cout << "Specify where you want to place the edge of your Cruiser (3 spaces). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	orientation = cruiser.orientation();
+
+	userSpotTemp = userSpot;
+	counter = 1;
+	while (counter != 4)
+	{
+		userSpotTemp = cruiser.nextSpot(userSpotTemp, orientation);
+		if (userSpotTemp == NULL)
+			break;
+		if (board.checkForEmptySpot(userSpotTemp) == false)
+		{
+			std::cout << "Cannot place ship here because it will overlap another ship." << std::endl;
+			validPlacement = false;
+			break;
+		}
+		counter++;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		for (int i = 1; i < 3; i++)
+		{
+			userSpot = cruiser.nextSpot(userSpot, orientation);
+			board.updateBoard(userSpot);
+		}
+
+		board.displayBoard();
+	}
+	//End of placing cruiser
+
+
+	//Place first destroyer start
+	std::cout << "Specify where you want to place the edge of your first Destroyer (2 spaces). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	orientation = destroyer.orientation();
+
+	userSpotTemp = userSpot;
+	counter = 1;
+	while (counter != 3)
+	{
+		userSpotTemp = destroyer.nextSpot(userSpotTemp, orientation);
+		if (userSpotTemp == NULL)
+			break;
+		if (board.checkForEmptySpot(userSpotTemp) == false)
+		{
+			std::cout << "Cannot place ship here because it will overlap another ship." << std::endl;
+			validPlacement = false;
+			break;
+		}
+		counter++;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		for (int i = 1; i < 2; i++)
+		{
+			userSpot = destroyer.nextSpot(userSpot, orientation);
+			board.updateBoard(userSpot);
+		}
+
+		board.displayBoard();
+	}
+	//End of placing first destroyer
+
+	//Place second destroyer start
+	std::cout << "Specify where you want to place the edge of your second Destroyer (2 spaces). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	orientation = destroyer.orientation();
+
+	userSpotTemp = userSpot;
+	counter = 1;
+	while (counter != 3)
+	{
+		userSpotTemp = destroyer.nextSpot(userSpotTemp, orientation);
+		if (userSpotTemp == NULL)
+			break;
+		if (board.checkForEmptySpot(userSpotTemp) == false)
+		{
+			std::cout << "Cannot place ship here because it will overlap another ship." << std::endl;
+			validPlacement = false;
+			break;
+		}
+		counter++;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		for (int i = 1; i < 2; i++)
+		{
+			userSpot = destroyer.nextSpot(userSpot, orientation);
+			board.updateBoard(userSpot);
+		}
+
+		board.displayBoard();
+	}
+	//End of placing second destroyer
+
+
+	//Place first submarine start
+	std::cout << "Specify where you want to place the edge of your first Submarine (1 Space). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		board.displayBoard();
+	}
+	//End of placing first submarine
+
+
+	//Place second submarine start
+	std::cout << "Specify where you want to place the edge of your second Submarine (1 Space). (Example 'A1')" << std::endl;
+	std::cin >> userInput;
+	while (!board.checkInput(userInput))
+	{
+		std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+		std::cin >> userInput;
+	}
+
+	userSpot = board.findArrayIndex(userInput);
+
+	while (!board.checkForEmptySpot(userSpot))
+	{
+		std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+		std::cin >> userInput;
+		while (!board.checkInput(userInput))
+		{
+			std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+			std::cin >> userInput;
+		}
+		userSpot = board.findArrayIndex(userInput);
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateBoard(userSpot);
+		board.displayBoard();
+	}
+	//End of placing second submarine
 
 	std::cin.get();
 	return 0;

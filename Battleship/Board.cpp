@@ -4,7 +4,6 @@
 
 void Board::displayBoard()
 {
-	spot[56] = (char)254;
 	std::cout << "\t\t1 2 3 4 5 6 7 8 9 10" << std::endl;
 	std::cout << "\t      A|" << spot[0] << "|" << spot[1] << "|" << spot[2] << "|" << spot[3] << "|" << spot[4] << "|" << spot[5] << "|" << spot[6] << "|" << spot[7] << "|" << spot[8] << "|" << spot[9] << "|" << std::endl;
 	std::cout << "\t      B|" << spot[10] << "|" << spot[11] << "|" << spot[12] << "|" << spot[13] << "|" << spot[14] << "|" << spot[15] << "|" << spot[16] << "|" << spot[17] << "|" << spot[18] << "|" << spot[19] << "|" << std::endl;
@@ -28,7 +27,6 @@ void Board::setChar()
 	for (int i = 0; i < 100; i++)
 	{
 		spot[i] = NULL;
-		//(char)254
 	}
 }
 
