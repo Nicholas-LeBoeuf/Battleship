@@ -16,29 +16,170 @@ Date: November 20th, 2020
 #include "Submarine.h"
 #include "Board.h"
 
+Board board;
+Ship ship;
+AircraftCarrier aircraftCarrier;
+Battleship battleship;
+Cruiser cruiser;
+Destroyer destroyer;
+Submarine submarine;
+
+std::string userInput;
+int userSpot, userSpotTemp, counter, maxIndex, compSpot, compSpotTemp, move;
+char orientation;
+bool validPlacement = true;
+int turn = 0;
+bool winner = false;
+
+void playerPlaceShips();
+void computerPlaceShips();
+
 int main()
 {
-	Board board;
-	Ship ship;
-	AircraftCarrier aircraftCarrier;
-	Battleship battleship;
-	Cruiser cruiser;
-	Destroyer destroyer;
-	Submarine submarine;
-
-	std::string userInput;
-	int userSpot, userSpotTemp, counter, maxIndex, compSpot, compSpotTemp;
-	char orientation;
-	bool validPlacement = true;
-
 	std::cout << "\t**********************************" << std::endl;
 	std::cout << "\t\t    BATTLESHIP" << std::endl;
 	std::cout << "\t**********************************\n\n" << std::endl;
 
 
-	board.setChar();
-	board.displayBoard();
+	board.setP1Char();
+	board.setP1HitsChar();
+	board.displayPlayer1Board();
+	board.displayPlayer1HitsBoard();
 
+	playerPlaceShips();
+	
+	board.setCompChar();
+
+	std::cout << "Computer will now place their ships..." << std::endl;
+
+	computerPlaceShips();
+
+
+	
+
+
+	std::cout << "\n\n\n\nPlayer goes first!" << std::endl;
+	turn = 0;
+	do {
+		if (turn == 0) //Players turn
+		{
+			board.displayPlayer1Board();
+			board.displayPlayer1HitsBoard();
+			std::cout << "Please input where you would like to make your move. (Example input: 'A1')." << std::endl;
+			std::cin >> userInput;
+
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input! Please type in letter and then number. (Example input: 'A1')." << std::endl;
+				std::cin >> userInput;
+			}
+
+			move = board.findArrayIndex(userInput);
+
+			while (!board.checkForHitsEmptySpot(move))
+			{
+				std::cout << "You already made a move here! Please make another move." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input! Please type in letter and then number. (Example input: 'A1')." << std::endl;
+					std::cin >> userInput;
+				}
+				move = board.findArrayIndex(userInput);
+			}
+
+			if (board.compareHitWithBoard(move, turn) == true)
+			{
+				char letter = 'X';
+				board.updateHitBoard(move, letter);
+				board.displayPlayer1Board();
+				board.displayPlayer1HitsBoard();
+				std::cout << "Hit!" << std::endl;
+			}
+			else if (board.compareHitWithBoard(move, turn) == false)
+			{
+				char letter = 'O';
+				board.updateHitBoard(move, letter);
+				board.displayPlayer1Board();
+				board.displayPlayer1HitsBoard();
+				std::cout << "Miss!" << std::endl;
+			}
+
+			if (board.checkForUserWin())
+			{
+				winner = true;
+				break;
+			}
+			else
+			{
+				turn = 1;
+			}
+		}
+
+		else if (turn == 1) //Computers turn
+		{
+			Sleep(1000);
+			std::cout << "Computer is taking their turn..." << std::endl;
+			Sleep(1000);
+			std::cout << "..." << std::endl;
+			Sleep(1000);
+			std::cout << "..." << std::endl;
+			Sleep(1000);
+			std::cout << "..." << std::endl;
+			Sleep(1000);
+
+			maxIndex = 100;
+
+			move = ship.computerRandomIndex(maxIndex);
+			while (!board.compCheckP1Spot(move))
+			{
+				move = ship.computerRandomIndex(maxIndex);
+			}
+
+			if (board.checkForEmptySpot(move) == true)
+			{
+				char letter = 'O';
+				board.compUpdateP1Board(move, letter);
+				board.displayPlayer1Board();
+				std::cout << "The computer missed!" << std::endl;
+			}
+			else
+			{
+				char letter = 'H';
+				board.compUpdateP1Board(move, letter);
+				board.displayPlayer1Board();
+				std::cout << "The computer has hit one of your ships!" << std::endl;
+			}
+			if (board.checkForCompWin())
+			{
+				winner = true;
+				break;
+			}
+			else
+			{
+				turn = 0;
+			}
+		}
+
+
+	} while (winner == false);
+
+	if (winner == true)
+	{
+		std::cout << "\t**********************************" << std::endl;
+		if (turn == 0)
+			std::cout << "\t\t    PLAYER WINS!" << std::endl;
+		else if (turn == 1)
+			std::cout << "\t\t    COMPUTER WINS!" << std::endl;
+		std::cout << "\t**********************************\n\n" << std::endl;
+	}
+
+	std::cin.get();
+	return 0;
+}
+
+void playerPlaceShips()
+{
 	//Place aircraft carrier start
 	std::cout << "Specify where you want to place the edge of your Aircraft Carrier (5 spaces). (Example 'A1')" << std::endl;
 	std::cin >> userInput;
@@ -60,9 +201,61 @@ int main()
 			std::cin >> userInput;
 		}
 		userSpot = board.findArrayIndex(userInput);
+
 	}
 
 	orientation = aircraftCarrier.orientation();
+
+	if (orientation == 'H') {
+		while (!aircraftCarrier.checkInvalidIndex(userSpot))
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
+	else if (orientation == 'V')
+	{
+		while (userSpot > 59)
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
 
 	userSpotTemp = userSpot;
 	counter = 1;
@@ -89,7 +282,7 @@ int main()
 			board.updateBoard(userSpot);
 		}
 
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing aircraft carrier
 
@@ -119,6 +312,57 @@ int main()
 
 	orientation = battleship.orientation();
 
+	if (orientation == 'H') {
+		while (!battleship.checkInvalidIndex(userSpot))
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
+	else if (orientation == 'V')
+	{
+		while (userSpot > 69)
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
 	userSpotTemp = userSpot;
 	counter = 1;
 	while (counter != 5)
@@ -144,7 +388,7 @@ int main()
 			board.updateBoard(userSpot);
 		}
 
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing battleship
 
@@ -173,6 +417,57 @@ int main()
 
 	orientation = cruiser.orientation();
 
+	if (orientation == 'H') {
+		while (!cruiser.checkInvalidIndex(userSpot))
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
+	else if (orientation == 'V')
+	{
+		while (userSpot > 79)
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
 	userSpotTemp = userSpot;
 	counter = 1;
 	while (counter != 4)
@@ -198,7 +493,7 @@ int main()
 			board.updateBoard(userSpot);
 		}
 
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing cruiser
 
@@ -228,6 +523,57 @@ int main()
 
 	orientation = destroyer.orientation();
 
+	if (orientation == 'H') {
+		while (!destroyer.checkInvalidIndex(userSpot))
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
+	else if (orientation == 'V')
+	{
+		while (userSpot > 89)
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
 	userSpotTemp = userSpot;
 	counter = 1;
 	while (counter != 3)
@@ -253,7 +599,7 @@ int main()
 			board.updateBoard(userSpot);
 		}
 
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing first destroyer
 
@@ -282,6 +628,57 @@ int main()
 
 	orientation = destroyer.orientation();
 
+	if (orientation == 'H') {
+		while (!destroyer.checkInvalidIndex(userSpot))
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
+	else if (orientation == 'V')
+	{
+		while (userSpot > 89)
+		{
+			std::cout << "Invalid input. Ship will run off the board. Try again." << std::endl;
+			std::cin >> userInput;
+			while (!board.checkInput(userInput))
+			{
+				std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+				std::cin >> userInput;
+			}
+			userSpot = board.findArrayIndex(userInput);
+			while (!board.checkForEmptySpot(userSpot))
+			{
+				std::cout << "Spot is already taken! Please choose another spot." << std::endl;
+				std::cin >> userInput;
+				while (!board.checkInput(userInput))
+				{
+					std::cout << "Invalid input. Please use the format of letter and then number. (Example 'A1')" << std::endl;
+					std::cin >> userInput;
+				}
+				userSpot = board.findArrayIndex(userInput);
+			}
+		}
+	}
+
 	userSpotTemp = userSpot;
 	counter = 1;
 	while (counter != 3)
@@ -307,7 +704,7 @@ int main()
 			board.updateBoard(userSpot);
 		}
 
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing second destroyer
 
@@ -338,7 +735,7 @@ int main()
 	if (validPlacement == true)
 	{
 		board.updateBoard(userSpot);
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing first submarine
 
@@ -369,12 +766,17 @@ int main()
 	if (validPlacement == true)
 	{
 		board.updateBoard(userSpot);
-		board.displayBoard();
+		board.displayPlayer1Board();
 	}
 	//End of placing second submarine
+	board.storePlayer1Index();
+}
 
-	board.setCompChar();
 
+
+void computerPlaceShips()
+{
+	Sleep(2000);
 	//Computer placing ships on board
 	aircraftCarrier.resetCounter();
 	//Aircraft carrier
@@ -386,7 +788,7 @@ int main()
 			maxIndex = 60;
 			compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
 
-			while (!board.checkForEmptySpot(compSpot))
+			while (!board.compCheckForEmptySpot(compSpot))
 			{
 				compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
 			}
@@ -402,7 +804,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -418,7 +820,7 @@ int main()
 			{
 				compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
 				if (aircraftCarrier.checkInvalidIndex(compSpot))
-					if (board.checkForEmptySpot(compSpot))
+					if (board.compCheckForEmptySpot(compSpot))
 						break;
 					else
 						continue;
@@ -437,7 +839,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -456,9 +858,11 @@ int main()
 				break;
 			board.updateCompBoard(compSpot);
 		}
-		//board.displayCompBoard();
 	}
+
+	std::cout << "Computer has placed their aircraft carrier..." << std::endl;
 	Sleep(3000);
+
 	battleship.resetCounter();
 	//Battleship
 	validPlacement = false;
@@ -469,7 +873,7 @@ int main()
 			maxIndex = 70;
 			compSpot = battleship.computerRandomIndex(maxIndex);
 
-			while (!board.checkForEmptySpot(compSpot))
+			while (!board.compCheckForEmptySpot(compSpot))
 			{
 				compSpot = battleship.computerRandomIndex(maxIndex);
 			}
@@ -485,7 +889,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -501,7 +905,7 @@ int main()
 			{
 				compSpot = battleship.computerRandomIndex(maxIndex);
 				if (battleship.checkInvalidIndex(compSpot))
-					if (board.checkForEmptySpot(compSpot))
+					if (board.compCheckForEmptySpot(compSpot))
 						break;
 					else
 						continue;
@@ -520,7 +924,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -539,9 +943,11 @@ int main()
 				break;
 			board.updateCompBoard(compSpot);
 		}
-		//board.displayCompBoard();
 	}
+
+	std::cout << "Computer has placed their battleship..." << std::endl;
 	Sleep(3000);
+
 	//Cruiser Start
 	cruiser.resetCounter();
 	validPlacement = false;
@@ -552,7 +958,7 @@ int main()
 			maxIndex = 70;
 			compSpot = cruiser.computerRandomIndex(maxIndex);
 
-			while (!board.checkForEmptySpot(compSpot))
+			while (!board.compCheckForEmptySpot(compSpot))
 			{
 				compSpot = cruiser.computerRandomIndex(maxIndex);
 			}
@@ -568,7 +974,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -584,7 +990,7 @@ int main()
 			{
 				compSpot = cruiser.computerRandomIndex(maxIndex);
 				if (cruiser.checkInvalidIndex(compSpot))
-					if (board.checkForEmptySpot(compSpot))
+					if (board.compCheckForEmptySpot(compSpot))
 						break;
 					else
 						continue;
@@ -603,7 +1009,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -622,8 +1028,8 @@ int main()
 				break;
 			board.updateCompBoard(compSpot);
 		}
-		//board.displayCompBoard();
 	}
+	std::cout << "Computer has placed their cruiser..." << std::endl;
 	Sleep(3000);
 
 	//First Destroyer start
@@ -636,7 +1042,7 @@ int main()
 			maxIndex = 70;
 			compSpot = destroyer.computerRandomIndex(maxIndex);
 
-			while (!board.checkForEmptySpot(compSpot))
+			while (!board.compCheckForEmptySpot(compSpot))
 			{
 				compSpot = destroyer.computerRandomIndex(maxIndex);
 			}
@@ -652,7 +1058,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -668,7 +1074,7 @@ int main()
 			{
 				compSpot = destroyer.computerRandomIndex(maxIndex);
 				if (destroyer.checkInvalidIndex(compSpot))
-					if (board.checkForEmptySpot(compSpot))
+					if (board.compCheckForEmptySpot(compSpot))
 						break;
 					else
 						continue;
@@ -687,7 +1093,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -706,8 +1112,9 @@ int main()
 				break;
 			board.updateCompBoard(compSpot);
 		}
-		//board.displayCompBoard();
 	}
+
+	std::cout << "Computer has placed their first destroyer..." << std::endl;
 	Sleep(3000);
 
 	//Second Destroyer start
@@ -720,7 +1127,7 @@ int main()
 			maxIndex = 70;
 			compSpot = destroyer.computerRandomIndex(maxIndex);
 
-			while (!board.checkForEmptySpot(compSpot))
+			while (!board.compCheckForEmptySpot(compSpot))
 			{
 				compSpot = destroyer.computerRandomIndex(maxIndex);
 			}
@@ -736,7 +1143,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -752,7 +1159,7 @@ int main()
 			{
 				compSpot = destroyer.computerRandomIndex(maxIndex);
 				if (destroyer.checkInvalidIndex(compSpot))
-					if (board.checkForEmptySpot(compSpot))
+					if (board.compCheckForEmptySpot(compSpot))
 						break;
 					else
 						continue;
@@ -771,7 +1178,7 @@ int main()
 					validPlacement = true;
 					break;
 				}
-				if (board.checkForEmptySpot(compSpotTemp) == false)
+				if (board.compCheckForEmptySpot(compSpotTemp) == false)
 				{
 					validPlacement = false;
 					break;
@@ -790,8 +1197,9 @@ int main()
 				break;
 			board.updateCompBoard(compSpot);
 		}
-		//board.displayCompBoard();
 	}
+
+	std::cout << "Computer has placed their second destroyer..." << std::endl;
 	Sleep(3000);
 
 	//Place first submarine
@@ -800,7 +1208,7 @@ int main()
 	while (validPlacement == false) {
 		maxIndex = 100;
 		compSpot = submarine.computerRandomIndex(maxIndex);
-		while (!board.checkForEmptySpot(compSpot))
+		while (!board.compCheckForEmptySpot(compSpot))
 		{
 			compSpot = submarine.computerRandomIndex(100);
 		}
@@ -810,8 +1218,9 @@ int main()
 	if (validPlacement == true)
 	{
 		board.updateCompBoard(compSpot);
-		//board.displayCompBoard();
 	}
+
+	std::cout << "Computer has placed their first submarine..." << std::endl;
 	Sleep(3000);
 
 	//Place second submarine
@@ -820,7 +1229,7 @@ int main()
 	while (validPlacement == false) {
 		maxIndex = 100;
 		compSpot = submarine.computerRandomIndex(maxIndex);
-		while (!board.checkForEmptySpot(compSpot))
+		while (!board.compCheckForEmptySpot(compSpot))
 		{
 			compSpot = submarine.computerRandomIndex(100);
 		}
@@ -830,10 +1239,8 @@ int main()
 	if (validPlacement == true)
 	{
 		board.updateCompBoard(compSpot);
-		//board.displayCompBoard();
 	}
-	board.displayCompBoard();
-
-	std::cin.get();
-	return 0;
+	std::cout << "Computer has placed their second submarine and is ready!" << std::endl;
+	board.storeComputerIndex();
+	Sleep(2000);
 }
