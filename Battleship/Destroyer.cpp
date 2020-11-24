@@ -21,3 +21,18 @@ int Destroyer::nextSpot(int index, char orientation)
 		return NULL;
 	}
 }
+
+bool Destroyer::checkInvalidIndex(int index)
+{
+	for (int i = 0; i < 10; i++)
+	{
+		if (index == invalidCompIndex[i])
+			return false;
+	}
+	return true;
+}
+
+void Destroyer::resetCounter()
+{
+	counter = 1;
+}

@@ -21,3 +21,18 @@ int Cruiser::nextSpot(int index, char orientation)
 		return NULL;
 	}
 }
+
+bool Cruiser::checkInvalidIndex(int index)
+{
+	for (int i = 0; i < 20; i++)
+	{
+		if (index == invalidCompIndex[i])
+			return false;
+	}
+	return true;
+}
+
+void Cruiser::resetCounter()
+{
+	counter = 1;
+}

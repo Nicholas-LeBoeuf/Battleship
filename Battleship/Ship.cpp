@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include "Ship.h"
 
 char Ship::orientation()
@@ -16,4 +17,27 @@ char Ship::orientation()
 	}
 
 	return ori;
+}
+
+char Ship::computerRandomOrientation()
+{
+	int randNum;
+	srand(time(NULL));
+
+	randNum = rand() % 2;
+
+	if (randNum == 0)
+		return 'V';
+	else
+		return 'H';
+}
+
+int Ship::computerRandomIndex(int maxIndex)
+{
+	int index;
+	srand(time(NULL));
+
+	index = rand() % maxIndex;
+
+	return index;
 }

@@ -21,3 +21,18 @@ int Battleship::nextSpot(int index, char orientation)
 		return NULL;
 	}
 }
+
+bool Battleship::checkInvalidIndex(int index)
+{
+	for (int i = 0; i < 30; i++)
+	{
+		if (index == invalidCompIndex[i])
+			return false;
+	}
+	return true;
+}
+
+void Battleship::resetCounter()
+{
+	counter = 1;
+}

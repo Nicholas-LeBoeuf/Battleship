@@ -5,6 +5,7 @@ Author: Nicholas LeBoeuf
 Date: November 20th, 2020
 *****************************************************************/
 #include <iostream>
+#include <Windows.h>
 
 #include "Ship.h"
 #include "AircraftCarrier.h"
@@ -26,7 +27,7 @@ int main()
 	Submarine submarine;
 
 	std::string userInput;
-	int userSpot, userSpotTemp, counter;
+	int userSpot, userSpotTemp, counter, maxIndex, compSpot, compSpotTemp;
 	char orientation;
 	bool validPlacement = true;
 
@@ -371,6 +372,467 @@ int main()
 		board.displayBoard();
 	}
 	//End of placing second submarine
+
+	board.setCompChar();
+
+	//Computer placing ships on board
+	aircraftCarrier.resetCounter();
+	//Aircraft carrier
+	validPlacement = false;
+	while (validPlacement == false) {
+		orientation = aircraftCarrier.computerRandomOrientation();
+		if (orientation == 'V')
+		{
+			maxIndex = 60;
+			compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
+
+			while (!board.checkForEmptySpot(compSpot))
+			{
+				compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 6)
+			{
+				compSpotTemp = aircraftCarrier.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+		else if (orientation == 'H')
+		{
+			maxIndex = 100;
+
+			int f = 0;
+			while (f < 1)
+			{
+				compSpot = aircraftCarrier.computerRandomIndex(maxIndex);
+				if (aircraftCarrier.checkInvalidIndex(compSpot))
+					if (board.checkForEmptySpot(compSpot))
+						break;
+					else
+						continue;
+				else
+					continue;
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 6)
+			{
+				compSpotTemp = aircraftCarrier.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		for (int i = 1; i < 5; i++)
+		{
+			compSpot = aircraftCarrier.nextSpot(compSpot, orientation);
+			if (compSpot == NULL)
+				break;
+			board.updateCompBoard(compSpot);
+		}
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+	battleship.resetCounter();
+	//Battleship
+	validPlacement = false;
+	while (validPlacement == false) {
+		orientation = battleship.computerRandomOrientation();
+		if (orientation == 'V')
+		{
+			maxIndex = 70;
+			compSpot = battleship.computerRandomIndex(maxIndex);
+
+			while (!board.checkForEmptySpot(compSpot))
+			{
+				compSpot = battleship.computerRandomIndex(maxIndex);
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 5)
+			{
+				compSpotTemp = battleship.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+		else if (orientation == 'H')
+		{
+			maxIndex = 100;
+
+			int f = 0;
+			while (f < 1)
+			{
+				compSpot = battleship.computerRandomIndex(maxIndex);
+				if (battleship.checkInvalidIndex(compSpot))
+					if (board.checkForEmptySpot(compSpot))
+						break;
+					else
+						continue;
+				else
+					continue;
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 5)
+			{
+				compSpotTemp = battleship.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		for (int i = 1; i < 5; i++)
+		{
+			compSpot = battleship.nextSpot(compSpot, orientation);
+			if (compSpot == NULL)
+				break;
+			board.updateCompBoard(compSpot);
+		}
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+	//Cruiser Start
+	cruiser.resetCounter();
+	validPlacement = false;
+	while (validPlacement == false) {
+		orientation = cruiser.computerRandomOrientation();
+		if (orientation == 'V')
+		{
+			maxIndex = 70;
+			compSpot = cruiser.computerRandomIndex(maxIndex);
+
+			while (!board.checkForEmptySpot(compSpot))
+			{
+				compSpot = cruiser.computerRandomIndex(maxIndex);
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 4)
+			{
+				compSpotTemp = cruiser.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+		else if (orientation == 'H')
+		{
+			maxIndex = 100;
+
+			int f = 0;
+			while (f < 1)
+			{
+				compSpot = cruiser.computerRandomIndex(maxIndex);
+				if (cruiser.checkInvalidIndex(compSpot))
+					if (board.checkForEmptySpot(compSpot))
+						break;
+					else
+						continue;
+				else
+					continue;
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 4)
+			{
+				compSpotTemp = cruiser.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		for (int i = 1; i < 5; i++)
+		{
+			compSpot = cruiser.nextSpot(compSpot, orientation);
+			if (compSpot == NULL)
+				break;
+			board.updateCompBoard(compSpot);
+		}
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+
+	//First Destroyer start
+	destroyer.resetCounter();
+	validPlacement = false;
+	while (validPlacement == false) {
+		orientation = destroyer.computerRandomOrientation();
+		if (orientation == 'V')
+		{
+			maxIndex = 70;
+			compSpot = destroyer.computerRandomIndex(maxIndex);
+
+			while (!board.checkForEmptySpot(compSpot))
+			{
+				compSpot = destroyer.computerRandomIndex(maxIndex);
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 3)
+			{
+				compSpotTemp = destroyer.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+		else if (orientation == 'H')
+		{
+			maxIndex = 100;
+
+			int f = 0;
+			while (f < 1)
+			{
+				compSpot = destroyer.computerRandomIndex(maxIndex);
+				if (destroyer.checkInvalidIndex(compSpot))
+					if (board.checkForEmptySpot(compSpot))
+						break;
+					else
+						continue;
+				else
+					continue;
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 3)
+			{
+				compSpotTemp = destroyer.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		for (int i = 1; i < 5; i++)
+		{
+			compSpot = destroyer.nextSpot(compSpot, orientation);
+			if (compSpot == NULL)
+				break;
+			board.updateCompBoard(compSpot);
+		}
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+
+	//Second Destroyer start
+	destroyer.resetCounter();
+	validPlacement = false;
+	while (validPlacement == false) {
+		orientation = destroyer.computerRandomOrientation();
+		if (orientation == 'V')
+		{
+			maxIndex = 70;
+			compSpot = destroyer.computerRandomIndex(maxIndex);
+
+			while (!board.checkForEmptySpot(compSpot))
+			{
+				compSpot = destroyer.computerRandomIndex(maxIndex);
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 3)
+			{
+				compSpotTemp = destroyer.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+		else if (orientation == 'H')
+		{
+			maxIndex = 100;
+
+			int f = 0;
+			while (f < 1)
+			{
+				compSpot = destroyer.computerRandomIndex(maxIndex);
+				if (destroyer.checkInvalidIndex(compSpot))
+					if (board.checkForEmptySpot(compSpot))
+						break;
+					else
+						continue;
+				else
+					continue;
+			}
+
+			compSpotTemp = compSpot;
+			counter = 1;
+
+			while (counter != 3)
+			{
+				compSpotTemp = destroyer.nextSpot(compSpotTemp, orientation);
+				if (compSpotTemp == NULL)
+				{
+					validPlacement = true;
+					break;
+				}
+				if (board.checkForEmptySpot(compSpotTemp) == false)
+				{
+					validPlacement = false;
+					break;
+				}
+			}
+		}
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		for (int i = 1; i < 5; i++)
+		{
+			compSpot = destroyer.nextSpot(compSpot, orientation);
+			if (compSpot == NULL)
+				break;
+			board.updateCompBoard(compSpot);
+		}
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+
+	//Place first submarine
+	submarine.resetCounter();
+	validPlacement = false;
+	while (validPlacement == false) {
+		maxIndex = 100;
+		compSpot = submarine.computerRandomIndex(maxIndex);
+		while (!board.checkForEmptySpot(compSpot))
+		{
+			compSpot = submarine.computerRandomIndex(100);
+		}
+		validPlacement = true;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		//board.displayCompBoard();
+	}
+	Sleep(3000);
+
+	//Place second submarine
+	submarine.resetCounter();
+	validPlacement = false;
+	while (validPlacement == false) {
+		maxIndex = 100;
+		compSpot = submarine.computerRandomIndex(maxIndex);
+		while (!board.checkForEmptySpot(compSpot))
+		{
+			compSpot = submarine.computerRandomIndex(100);
+		}
+		validPlacement = true;
+	}
+
+	if (validPlacement == true)
+	{
+		board.updateCompBoard(compSpot);
+		//board.displayCompBoard();
+	}
+	board.displayCompBoard();
 
 	std::cin.get();
 	return 0;

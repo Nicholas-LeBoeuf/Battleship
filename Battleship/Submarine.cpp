@@ -21,3 +21,8 @@ int Submarine::nextSpot(int index, char orientation)
 		return NULL;
 	}
 }
+
+void Submarine::resetCounter()
+{
+	counter = 1;
+}

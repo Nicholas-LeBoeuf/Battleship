@@ -17,9 +17,29 @@ void Board::displayBoard()
 	std::cout << "\t      J|" << spot[90] << "|" << spot[91] << "|" << spot[92] << "|" << spot[93] << "|" << spot[94] << "|" << spot[95] << "|" << spot[96] << "|" << spot[97] << "|" << spot[98] << "|" << spot[99] << "|" << std::endl;
 }
 
+void Board::displayCompBoard()
+{
+	std::cout << "\t\t1 2 3 4 5 6 7 8 9 10" << std::endl;
+	std::cout << "\t      A|" << compSpot[0] << "|" << compSpot[1] << "|" << compSpot[2] << "|" << compSpot[3] << "|" << compSpot[4] << "|" << compSpot[5] << "|" << compSpot[6] << "|" << compSpot[7] << "|" << compSpot[8] << "|" << compSpot[9] << "|" << std::endl;
+	std::cout << "\t      B|" << compSpot[10] << "|" << compSpot[11] << "|" << compSpot[12] << "|" << compSpot[13] << "|" << compSpot[14] << "|" << compSpot[15] << "|" << compSpot[16] << "|" << compSpot[17] << "|" << compSpot[18] << "|" << compSpot[19] << "|" << std::endl;
+	std::cout << "\t      C|" << compSpot[20] << "|" << compSpot[21] << "|" << compSpot[22] << "|" << compSpot[23] << "|" << compSpot[24] << "|" << compSpot[25] << "|" << compSpot[26] << "|" << compSpot[27] << "|" << compSpot[28] << "|" << compSpot[29] << "|" << std::endl;
+	std::cout << "\t      D|" << compSpot[30] << "|" << compSpot[31] << "|" << compSpot[32] << "|" << compSpot[33] << "|" << compSpot[34] << "|" << compSpot[35] << "|" << compSpot[36] << "|" << compSpot[37] << "|" << compSpot[38] << "|" << compSpot[39] << "|" << std::endl;
+	std::cout << "\t      E|" << compSpot[40] << "|" << compSpot[41] << "|" << compSpot[42] << "|" << compSpot[43] << "|" << compSpot[44] << "|" << compSpot[45] << "|" << compSpot[46] << "|" << compSpot[47] << "|" << compSpot[48] << "|" << compSpot[49] << "|" << std::endl;
+	std::cout << "\t      F|" << compSpot[50] << "|" << compSpot[51] << "|" << compSpot[52] << "|" << compSpot[53] << "|" << compSpot[54] << "|" << compSpot[55] << "|" << compSpot[56] << "|" << compSpot[57] << "|" << compSpot[58] << "|" << compSpot[59] << "|" << std::endl;
+	std::cout << "\t      G|" << compSpot[60] << "|" << compSpot[61] << "|" << compSpot[62] << "|" << compSpot[63] << "|" << compSpot[64] << "|" << compSpot[65] << "|" << compSpot[66] << "|" << compSpot[67] << "|" << compSpot[68] << "|" << compSpot[69] << "|" << std::endl;
+	std::cout << "\t      H|" << compSpot[70] << "|" << compSpot[71] << "|" << compSpot[72] << "|" << compSpot[73] << "|" << compSpot[74] << "|" << compSpot[75] << "|" << compSpot[76] << "|" << compSpot[77] << "|" << compSpot[78] << "|" << compSpot[79] << "|" << std::endl;
+	std::cout << "\t      I|" << compSpot[80] << "|" << compSpot[81] << "|" << compSpot[82] << "|" << compSpot[83] << "|" << compSpot[84] << "|" << compSpot[85] << "|" << compSpot[86] << "|" << compSpot[87] << "|" << compSpot[88] << "|" << compSpot[89] << "|" << std::endl;
+	std::cout << "\t      J|" << compSpot[90] << "|" << compSpot[91] << "|" << compSpot[92] << "|" << compSpot[93] << "|" << compSpot[94] << "|" << compSpot[95] << "|" << compSpot[96] << "|" << compSpot[97] << "|" << compSpot[98] << "|" << compSpot[99] << "|" << std::endl;
+}
+
 void Board::updateBoard(int userSpot)
 {
 	spot[userSpot] = (char)254;
+}
+
+void Board::updateCompBoard(int computerSpot)
+{
+	compSpot[computerSpot] = (char)254;
 }
 
 void Board::setChar()
@@ -27,6 +47,14 @@ void Board::setChar()
 	for (int i = 0; i < 100; i++)
 	{
 		spot[i] = NULL;
+	}
+}
+
+void Board::setCompChar()
+{
+	for (int i = 0; i < 100; i++)
+	{
+		compSpot[i] = NULL;
 	}
 }
 

@@ -1,4 +1,11 @@
 #include "AircraftCarrier.h"
+#include "Ship.h"
+#include "Battleship.h"
+#include "Cruiser.h"
+#include "Destroyer.h"
+#include "Ship.h"
+#include "Submarine.h"
+#include "Board.h"
 
 int AircraftCarrier::nextSpot(int index, char orientation)
 {	
@@ -20,4 +27,19 @@ int AircraftCarrier::nextSpot(int index, char orientation)
 		counter = 1;
 		return NULL;
 	}
+}
+
+bool AircraftCarrier::checkInvalidIndex(int index)
+{
+	for (int i = 0; i < 40; i++)
+	{
+		if (index == invalidCompIndex[i])
+			return false;
+	}
+	return true;
+}
+
+void AircraftCarrier::resetCounter()
+{
+	counter = 1;
 }
