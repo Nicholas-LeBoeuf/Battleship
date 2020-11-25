@@ -1,6 +1,6 @@
 #include "Submarine.h"
 
-int Submarine::nextSpot(int index, char orientation)
+int Submarine::nextSpot(int index, char orientation) //Goes to the next spot. If its vertical, it will +10, if its horizontal it will +1
 {
 	int val = 0;
 

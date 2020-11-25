@@ -1,6 +1,6 @@
 #include "Battleship.h"
 
-int Battleship::nextSpot(int index, char orientation)
+int Battleship::nextSpot(int index, char orientation) //Goes to the next spot. If its vertical, it will +10, if its horizontal it will +1
 {
 	int val = 0;
 
@@ -22,7 +22,8 @@ int Battleship::nextSpot(int index, char orientation)
 	}
 }
 
-bool Battleship::checkInvalidIndex(int index)
+bool Battleship::checkInvalidIndex(int index)//For vertical orientation, anything with a starting index that will eventually run off the board will return false
+{
 {
 	for (int i = 0; i < 30; i++)
 	{

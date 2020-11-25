@@ -1,6 +1,6 @@
 #include "Cruiser.h"
 
-int Cruiser::nextSpot(int index, char orientation)
+int Cruiser::nextSpot(int index, char orientation) //Goes to the next spot. If its vertical, it will +10, if its horizontal it will +1
 {
 	int val = 0;
 
@@ -22,7 +22,8 @@ int Cruiser::nextSpot(int index, char orientation)
 	}
 }
 
-bool Cruiser::checkInvalidIndex(int index)
+bool Cruiser::checkInvalidIndex(int index)//For vertical orientation, anything with a starting index that will eventually run off the board will return false
+{
 {
 	for (int i = 0; i < 20; i++)
 	{
